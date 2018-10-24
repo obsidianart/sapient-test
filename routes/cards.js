@@ -1,20 +1,33 @@
 const express = require('express')
-router = express.Router()
 
-router.post('/', (req, res) => {
-  res.status(501).send()
-})
+module.exports = (db) => {
+  const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.status(501).send()
-})
+  router.post('/', (req, res) => {
+    const {name, number, limit} = req.body
 
-router.put('/charge/:name', (req, res) => {
-  res.status(501).send()
-})
+    db.insert({
+      name,
+      number,
+      limit,
+      credit:0
+    })
 
-router.put('/credit/:name', (req, res) => {
-  res.status(501).send()
-})
+    res.status(200).send()
+  })
 
-module.exports = router
+  router.get('/', (req, res) => {
+    res.status(501).send()
+  })
+
+  router.put('/charge/:name', (req, res) => {
+    res.status(501).send()
+  })
+
+  router.put('/credit/:name', (req, res) => {
+    res.status(501).send()
+  }) 
+
+  return router
+}
+

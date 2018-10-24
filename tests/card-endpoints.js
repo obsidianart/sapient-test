@@ -1,19 +1,37 @@
 const test = require('tape')
 const request = require('supertest')
+const loki = require('lokijs')
+const express = require('express')
+const cardRoute = require('../routes/cards.js')
+const bodyParser = require('body-parser')
 
-const {app, server} = require('../index.js')
-
-// This is to avoid the server to keep listening.
-// We can alternatevely change the code to not start the server during testing
-server.close() 
-
-
+const getRouteInstance = ()=> {
+  const DB = new loki()
+  const cardDB = DB.addCollection('cards')
+  const app = express()
+  app.use(bodyParser.json()) //TODO: move this to a config file for the app
+  app.use('/',cardRoute(cardDB))
+  return {app}
+} 
 
 ///////////////////////////////////POST /cards
 
 test('POST /cards create a new credit card with 0 credit', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, DBspy} =  getRouteInstance()
+
+  request(app)
+    .post('/')
+    .send({
+      name:'Stefano',
+      number: 4012888888881881,
+      limit: "£10.01"
+    })
+    .expect(200)
+    .end((err, res)=>{
+        t.deepEqual(res.body,{})
+        t.error(err, 'No error')
+        t.end()
+    })
 })
 
 test('POST /cards validate name', function (t) {

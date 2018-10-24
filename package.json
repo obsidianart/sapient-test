@@ -19,9 +19,11 @@
   "homepage": "https://github.com/obsidianart/sapient-test#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "lokijs": "^1.5.5",
     "tape": "^4.9.1"
   },
   "devDependencies": {
+    "sinon": "^7.0.0",
     "supertest": "^3.3.0",
     "tap-spec": "^5.0.0"
   }
