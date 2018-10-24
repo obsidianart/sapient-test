@@ -29,9 +29,14 @@ module.exports = (db) => {
 
   router.get('/', (req, res) => {
     const result = db.find({})
+    const dbToUser = (result) => ({
+      ...result,
+      balance: numberToAmount(result.balance),
+      limit: numberToAmount(result.limit),
+    })
     
     // TODO: ? blacklist loki additional params ?
-    res.status(200).send(result)
+    res.status(200).send(result.map(dbToUser))
   })
 
   router.put('/charge/:name', (req, res) => {

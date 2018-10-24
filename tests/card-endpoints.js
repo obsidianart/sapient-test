@@ -304,6 +304,10 @@ test('GET /cards return all the cards', function (t) {
     .end((err, res)=>{
       t.equal(res.body.length, 1)
 
+      const stefano = res.body[0]
+      t.equal(stefano.balance, '£1000.00')
+      t.equal(stefano.limit, '£5000.00')
+
       t.error(err, 'No error')
       t.end()
     })
