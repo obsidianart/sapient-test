@@ -66,10 +66,5 @@ test('Create a user, credit, charge it, get it', function (t) {
       })
       .catch(err=>t.error(err, 'No error'))
     ))
-
-
-
-
-
   t.end()
 })
