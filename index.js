@@ -1,7 +1,15 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const cards = require('./routes/cards')
+const loki = require('lokijs')
+
+const DB = new loki()
+
+// Doing it here to remove the responsability over the DB implementation from cards
+// Later on, probably the entire database concept should be moved
+const cardDB = DB.addCollection('cards')
+
+const cards = require('./routes/cards')(cardDB)
 
 app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({ extended: false }))
