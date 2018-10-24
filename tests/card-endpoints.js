@@ -19,7 +19,7 @@ createStefanoOnDb = (db)=>{
   db.insert({
     name:'Stefano',
     number:4012888888881881,
-    limit: '£5000',
+    limit: 5000,
     balance: 1000
   })
 }
@@ -136,29 +136,72 @@ test('PUT /cards/charge/:name increase the balance', function (t) {
 })
 
 test('PUT /cards/charge/:name should not go over the limit', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/charge/Stefano')
+    .send({
+      amount: '£4001'
+    })
+    .expect(412)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+
+      const updated = cardDB.get(1)
+      t.equal(updated.balance, 1000)
+
+      t.end()
+    })
 })
 
-test('PUT /cards/charge/:name should return card and balance', function (t) {
-  t.fail('Not implemented')
-  t.end()
-})
+// Tested by case 1
+// test('PUT /cards/charge/:name should return card and balance', function (t) {
+//   t.fail('Not implemented')
+//   t.end()
+// })
 
 test('PUT /cards/charge/:name accepts the format £10.02', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/charge/Stefano')
+    .send({
+      amount: '£4001.10'
+    })
+    .expect(412)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+
+      const updated = cardDB.get(1)
+      t.equal(updated.balance, 1000)
+
+      t.end()
+    })
 })
 
-test('PUT /cards/charge/:name accepts the format £10', function (t) {
-  t.fail('Not implemented')
-  t.end()
-})
+// Tested by case 1
+// test('PUT /cards/charge/:name accepts the format £10', function (t) {
+//   t.fail('Not implemented')
+//   t.end()
+// })
 
 // Behaviour not specified
 test('PUT /cards/charge/:name for non existing name', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/charge/Mark')
+    .send({
+      amount: '£4001.10'
+    })
+    .expect(404)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 

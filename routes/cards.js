@@ -49,7 +49,7 @@ module.exports = (db) => {
 
     const amountNum = amountToNumber(amount)
 
-    if (amountNum+user.balance > user.limit) res.status(412).send()
+    if (amountNum+user.balance > user.limit) return res.status(412).send()
     
     user.balance += amountNum
 
