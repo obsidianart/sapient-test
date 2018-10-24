@@ -28,7 +28,10 @@ module.exports = (db) => {
   })
 
   router.get('/', (req, res) => {
-    res.status(501).send()
+    const result = db.find({})
+    
+    // TODO: ? blacklist loki additional params ?
+    res.status(200).send(result)
   })
 
   router.put('/charge/:name', (req, res) => {

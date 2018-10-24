@@ -281,11 +281,30 @@ test('PUT /cards/credit/:name for non existing name', function (t) {
 
 ///////////////////////////////////GET /cards
 test('GET /cards return an empty array at time 0', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+
+  request(app)
+    .get('/')
+    .expect(200)
+    .end((err, res)=>{
+      t.equal(res.body.length, 0)
+
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 test('GET /cards return all the cards', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .get('/')
+    .expect(200)
+    .end((err, res)=>{
+      t.equal(res.body.length, 1)
+
+      t.error(err, 'No error')
+      t.end()
+    })
 })
