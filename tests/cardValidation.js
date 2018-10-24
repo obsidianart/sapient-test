@@ -81,6 +81,9 @@ const cardAmountCases = [
   ['14.10', {isValid: false }], //Missing £ symbol
   [14, {isValid: false }], //Not a string
   ['£10.108', {isValid: false }], //Too many decimals
+  ['££10.10', {isValid: false }], //Not valid format
+  ['%£10.10', {isValid: false }], //Not valid format
+  ['£10.10&', {isValid: false }], //Not valid format
   ['£10.11', {isValid: true }],
   ['£10.10', {isValid: true }],
   ['£10.1', {isValid: true }],
@@ -104,7 +107,7 @@ const cardNameCases = [
   ['#2$%"', {isValid: true }], // I think this should fail but it's not in spec so I'd ask
 ]
 
-test('Card amount', function (t) {
+test('Card name', function (t) {
   cardNameCases.map(([cardName, {isValid, reason = false}])=>{
     const validation = cardValidation.validateCardName(cardName)
     t.equal(validation.valid, isValid, `Test failed on ${cardName}`)

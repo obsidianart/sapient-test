@@ -18,6 +18,7 @@ module.exports = {
 
   validateCardAmount: amount=> {
     if (typeof amount !== 'string') return validationError('Not a string')
+    if (! /^£[0-9]*\.?[0-9]{0,2}$/.test(amount)) return validationError('Not a string')
     return validationSuccess()
   },
 
