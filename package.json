@@ -1,0 +1,28 @@
+{
+  "name": "credit-card-processing",
+  "version": "1.0.0",
+  "description": "Basic credit card provider functionality",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "tape tests/**/*.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obsidianart/sapient-test.git"
+  },
+  "author": "Stefano Solinas - obsidianart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/obsidianart/sapient-test/issues"
+  },
+  "homepage": "https://github.com/obsidianart/sapient-test#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "tape": "^4.9.1"
+  },
+  "devDependencies": {
+    "supertest": "^3.3.0",
+    "tap-spec": "^5.0.0"
+  }
+}
