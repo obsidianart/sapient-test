@@ -28,25 +28,61 @@ test('POST /cards create a new credit card with 0 credit', function (t) {
     })
     .expect(200)
     .end((err, res)=>{
-        t.deepEqual(res.body,{})
-        t.error(err, 'No error')
-        t.end()
+      t.deepEqual(res.body,{})
+      t.error(err, 'No error')
+      t.end()
     })
 })
 
 test('POST /cards validate name', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, DBspy} =  getRouteInstance()
+
+  request(app)
+    .post('/')
+    .send({
+      name: 11,
+      number: 4012888888881881,
+      limit: "£10.01"
+    })
+    .expect(412)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 test('POST /cards validate card number', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, DBspy} =  getRouteInstance()
+
+  request(app)
+    .post('/')
+    .send({
+      name:'Stefano',
+      number: '4012888888881881',
+      limit: "£10.01"
+    })
+    .expect(412)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 test('POST /cards validate limit', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, DBspy} =  getRouteInstance()
+
+  request(app)
+    .post('/')
+    .send({
+      name:'Stefano',
+      number: 4012888888881881,
+      limit: 10.01
+    })
+    .expect(412)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 // Not in the requirement but seems likely, behaviour should be clarified

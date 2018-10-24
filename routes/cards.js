@@ -1,10 +1,18 @@
 const express = require('express')
+const validator = require('../src/cardValidation')
 
 module.exports = (db) => {
   const router = express.Router()
 
   router.post('/', (req, res) => {
     const {name, number, limit} = req.body
+    const isNameValid = validator.validateCardName(name).isValid
+    const isLimitValid = validator.validateCardAmount(limit).isValid
+    const isCardNumberValid = validator.validateCardNumber(number).isValid
+
+    if (!isNameValid) return res.status(412).send()
+    if (!isLimitValid) return res.status(412).send()
+    if (!isCardNumberValid) return res.status(412).send()
 
     db.insert({
       name,
