@@ -15,6 +15,15 @@ const getRouteInstance = ()=> {
   return {app, cardDB}
 }
 
+createStefanoOnDb = (db)=>{
+  db.insert({
+    name:'Stefano',
+    number:4012888888881881,
+    limit: '£5000',
+    balance: 1000
+  })
+}
+
 ///////////////////////////////////POST /cards
 
 test('POST /cards create a new credit card with 0 credit', function (t) {
@@ -35,14 +44,15 @@ test('POST /cards create a new credit card with 0 credit', function (t) {
       const created = cardDB.get(1)
       t.equal(created.name, 'Stefano')
       t.equal(created.number, 4012888888881881)
-      t.equal(created.limit, '£10.01')
+      t.equal(created.limit, 10.01)
+      t.equal(created.balance, 0)
 
       t.end()
     })
 })
 
 test('POST /cards validate name', function (t) {
-  const {app, DBspy} =  getRouteInstance()
+  const {app} =  getRouteInstance()
 
   request(app)
     .post('/')
@@ -59,7 +69,7 @@ test('POST /cards validate name', function (t) {
 })
 
 test('POST /cards validate card number', function (t) {
-  const {app, DBspy} =  getRouteInstance()
+  const {app} =  getRouteInstance()
 
   request(app)
     .post('/')
@@ -76,7 +86,7 @@ test('POST /cards validate card number', function (t) {
 })
 
 test('POST /cards validate limit', function (t) {
-  const {app, DBspy} =  getRouteInstance()
+  const {app} =  getRouteInstance()
 
   request(app)
     .post('/')
@@ -102,8 +112,27 @@ test('POST /cards validate limit', function (t) {
 ///////////////////////////////////PUT /cards/charge/:name
 
 test('PUT /cards/charge/:name increase the balance', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/charge/Stefano')
+    .send({
+      amount: '£10'
+    })
+    .expect(200)
+    .end((err, res)=>{
+      t.deepEqual(res.body,{
+        number: 4012888888881881,
+        balance: '£1010.00'
+      })
+      t.error(err, 'No error')
+
+      const updated = cardDB.get(1)
+      t.equal(updated.balance, 1010)
+
+      t.end()
+    })
 })
 
 test('PUT /cards/charge/:name should not go over the limit', function (t) {
