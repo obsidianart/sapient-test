@@ -4,6 +4,7 @@ const loki = require('lokijs')
 const express = require('express')
 const cardRoute = require('../routes/cards.js')
 const bodyParser = require('body-parser')
+const sinon = require('sinon')
 
 const getRouteInstance = ()=> {
   const DB = new loki()
@@ -11,25 +12,31 @@ const getRouteInstance = ()=> {
   const app = express()
   app.use(bodyParser.json()) //TODO: move this to a config file for the app
   app.use('/',cardRoute(cardDB))
-  return {app}
-} 
+  return {app, cardDB}
+}
 
 ///////////////////////////////////POST /cards
 
 test('POST /cards create a new credit card with 0 credit', function (t) {
-  const {app, DBspy} =  getRouteInstance()
+  const {app, cardDB} =  getRouteInstance()
 
   request(app)
     .post('/')
     .send({
       name:'Stefano',
       number: 4012888888881881,
-      limit: "£10.01"
+      limit: '£10.01'
     })
     .expect(200)
     .end((err, res)=>{
       t.deepEqual(res.body,{})
       t.error(err, 'No error')
+
+      const created = cardDB.get(1)
+      t.equal(created.name, 'Stefano')
+      t.equal(created.number, 4012888888881881)
+      t.equal(created.limit, '£10.01')
+
       t.end()
     })
 })

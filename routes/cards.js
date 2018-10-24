@@ -6,9 +6,9 @@ module.exports = (db) => {
 
   router.post('/', (req, res) => {
     const {name, number, limit} = req.body
-    const isNameValid = validator.validateCardName(name).isValid
-    const isLimitValid = validator.validateCardAmount(limit).isValid
-    const isCardNumberValid = validator.validateCardNumber(number).isValid
+    const isNameValid = validator.validateCardName(name).valid
+    const isLimitValid = validator.validateCardAmount(limit).valid
+    const isCardNumberValid = validator.validateCardNumber(number).valid
 
     if (!isNameValid) return res.status(412).send()
     if (!isLimitValid) return res.status(412).send()
