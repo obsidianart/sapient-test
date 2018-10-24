@@ -1,7 +1,7 @@
-var test = require('tape')
-var request = require('supertest')
+const test = require('tape')
+const request = require('supertest')
 
-var {app, server} = require('../index.js')
+const {app, server} = require('../index.js')
 
 // This is to avoid the server to keep listening.
 // We can alternatevely change the code to not start the server during testing
