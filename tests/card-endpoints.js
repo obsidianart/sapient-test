@@ -209,24 +209,74 @@ test('PUT /cards/charge/:name for non existing name', function (t) {
 ///////////////////////////////////PUT /cards/credit/:name
 
 test('PUT /cards/credit/:name should decrease the balance', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/credit/Stefano')
+    .send({
+      amount: '£10'
+    })
+    .expect(200)
+    .end((err, res)=>{
+      t.deepEqual(res.body,{
+        number: 4012888888881881,
+        balance: '£990.00'
+      })
+      t.error(err, 'No error')
+
+      const updated = cardDB.get(1)
+      t.equal(updated.balance, 990)
+
+      t.end()
+    })
 })
 
 test('PUT /cards/credit/:name should allow to go negative', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/credit/Stefano')
+    .send({
+      amount: '£10000'
+    })
+    .expect(200)
+    .end((err, res)=>{
+      t.deepEqual(res.body,{
+        number: 4012888888881881,
+        balance: '£-9000.00' //TODO: should it be -£9000 ?
+      })
+      t.error(err, 'No error')
+
+      const updated = cardDB.get(1)
+      t.equal(updated.balance, -9000)
+
+      t.end()
+    })
 })
 
-test('PUT /cards/credit/:name should return card and balance', function (t) {
-  t.fail('Not implemented')
-  t.end()
-})
+// Tested on case 1
+// test('PUT /cards/credit/:name should return card and balance', function (t) {
+//   t.fail('Not implemented')
+//   t.end()
+// })
 
 // Behaviour not specified
 test('PUT /cards/credit/:name for non existing name', function (t) {
-  t.fail('Not implemented')
-  t.end()
+  const {app, cardDB} =  getRouteInstance()
+  createStefanoOnDb(cardDB)
+
+  request(app)
+    .put('/credit/Mark')
+    .send({
+      amount: '£10'
+    })
+    .expect(404)
+    .end((err, res)=>{
+      t.error(err, 'No error')
+      t.end()
+    })
 })
 
 ///////////////////////////////////GET /cards

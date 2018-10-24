@@ -62,7 +62,31 @@ module.exports = (db) => {
   })
 
   router.put('/credit/:name', (req, res) => {
-    res.status(501).send()
+    const {name} = req.params
+    const {amount} = req.body
+
+    const isNameValid = validator.validateCardName(name).valid
+    const isAmountValid = validator.validateCardAmount(amount).valid
+    
+    if (!isNameValid) return res.status(412).send()
+    if (!isAmountValid) return res.status(412).send()
+
+    const user = db.findOne({
+      name,
+    })
+
+    if (!user) return res.status(404).send()
+
+    const amountNum = amountToNumber(amount)
+    
+    user.balance -= amountNum
+
+    db.update(user)
+
+    res.status(200).send({
+      balance: numberToAmount(user.balance),
+      number: user.number,
+    })
   }) 
 
   return router
